@@ -207,12 +207,25 @@ const doc = new Document({
   }],
 });
 
+const { execSync } = require('child_process');
+
 const outDir = path.join(__dirname, "out");
 Packer.toBuffer(doc).then((buf) => {
   fs.mkdirSync(outDir, { recursive: true });
   const outPath = path.join(outDir, "Resume_Gokul_Krishna.docx");
   fs.writeFileSync(outPath, buf);
   console.log("Written:", outPath);
+
+  // Try to convert DOCX -> PDF using LibreOffice (soffice). If not available, print a hint.
+  try {
+    execSync(`soffice --headless --convert-to pdf --outdir "${outDir}" "${outPath}"`, { stdio: 'inherit' });
+    const pdfPath = path.join(outDir, 'Resume_Gokul_Krishna.pdf');
+    console.log('PDF written:', pdfPath);
+  } catch (e) {
+    console.warn('PDF conversion skipped: LibreOffice `soffice` not found or conversion failed.');
+    console.warn('To produce a PDF automatically, install LibreOffice and ensure `soffice` is in PATH.');
+    console.warn('Or convert manually: soffice --headless --convert-to pdf --outdir out "' + outPath + '"');
+  }
 }).catch(err => {
   console.error("Failed to generate DOCX:", err);
 });
