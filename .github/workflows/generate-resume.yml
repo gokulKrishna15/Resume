@@ -1,5 +1,8 @@
 name: Generate Resume PDF
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ main ]
@@ -37,5 +40,7 @@ jobs:
             echo "No changes to generated files"
           else
             git commit -m "chore: update generated resume PDF and DOCX"
+            # use the workflow token for pushing
+            git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
             git push -u origin generated --force
           fi
