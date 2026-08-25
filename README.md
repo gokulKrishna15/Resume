@@ -15,6 +15,10 @@ npm install docx
 2. Run the generator:
 
 ```bash
+# If your environment treats .js files as ES modules, run the CommonJS file instead:
+node generate_resume.cjs
+
+# or, if you prefer the .js file and your environment supports CommonJS, run:
 node generate_resume.js
 ```
 
