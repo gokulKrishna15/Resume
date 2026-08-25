@@ -1,0 +1,12 @@
+{
+  "name": "resume-generator",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "generate": "node generate_resume.cjs",
+    "generate:pdf": "soffice --headless --convert-to pdf --outdir out out/Resume_Gokul_Krishna.docx"
+  },
+  "dependencies": {
+    "docx": "^8.3.0"
+  }
+}
