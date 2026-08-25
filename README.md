@@ -36,3 +36,7 @@ Notes:
 - The script writes to an `out` directory next to the script file.
 - If you want the file saved elsewhere, edit `generate_resume.cjs` and change the `outDir` path.
 
+CI automation:
+- A GitHub Action (`.github/workflows/generate-resume.yml`) will run on pushes to `main`. It installs LibreOffice, runs the generator, and commits the generated `out/Resume_Gokul_Krishna.pdf` and `.docx` to a branch named `generated`.
+- You can fetch or view the `generated` branch to get the latest PDF automatically created by CI.
+

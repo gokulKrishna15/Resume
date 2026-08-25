@@ -1,0 +1,41 @@
+name: Generate Resume PDF
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install LibreOffice
+        run: sudo apt-get update && sudo apt-get install -y libreoffice
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Generate resume
+        run: node generate_resume.cjs
+
+      - name: Commit generated files to `generated` branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B generated
+          git add out/Resume_Gokul_Krishna.pdf out/Resume_Gokul_Krishna.docx || true
+          if git diff --staged --quiet; then
+            echo "No changes to generated files"
+          else
+            git commit -m "chore: update generated resume PDF and DOCX"
+            git push -u origin generated --force
+          fi
